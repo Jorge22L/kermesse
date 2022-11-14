@@ -1,12 +1,18 @@
 <?php
+
 require_once '../entidades/tbl_usuario.php';
 require_once '../datos/dt_tbl_usuario.php';
 require_once '../controladores/usuarioController.php';
-
-$tu = new tbl_usuario();
-$dtu = new dt_tbl_usuario();
-$cu = new usuarioController();
+if(isset($_POST['m'])){
+    $metodo = $_POST['m'];
+    if(method_exists("usuarioController",$metodo))
+    {
+        usuarioController::{$metodo}();
+    }
+   
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -286,12 +292,12 @@ $cu = new usuarioController();
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Usuarios</h1>
+      <h1>Agregar Usuario</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Seguridad</a></li>
-          <li class="breadcrumb-item">Usuarios</li>
-          
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item">Seguridad</li>
+          <li class="breadcrumb-item active">Agregar Usuario</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -299,49 +305,47 @@ $cu = new usuarioController();
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
-
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Usuarios</h5>
-              <table class="table usuariosTable">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Email</th>
-                    <th>Usuario</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                    foreach($dtu->listarUsuario() as $r):
-                  ?>
-                  <tr>
-                    <td><?php echo $r->getIdUsuario(); ?></td>
-                    <td><?php echo $r->getNombres(); ?></td>
-                    <td><?php echo $r->getApellidos(); ?></td>
-                    <td><?php echo $r->getEmail(); ?></td>
-                    <td><?php echo $r->getUsuario(); ?></td>
-                    <td>
-                        <a href="editar_usuario.php?id_usuario=<?php echo $r->getIdUsuario(); ?>">
-                            <i class="bi bi-pencil-square" title="Editar Usuario"></i>
-                        </a>
-                        &nbsp;&nbsp;
-                        <a href="#">
-                            <i class="bi bi-trash3" title="Eliminar Usuario"></i>
-                        </a>
-                    </td>
-                  </tr>
-                  <?php endforeach;?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
+            <form action="" method="POST">
+                <div class="row mb-3">
+                    <input type="hidden" value="guardar" name="txtaccion" />
+                    <label class="col-sm-2 col-form-table">Nombre:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="nombre" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-table">Apellido:</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="apellido" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-table">Email:</label>
+                    <div class="col-sm-10">
+                        <input type="email" name="email" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-table">Usuario:</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="usuario" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-table">Contraseña:</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="pwd" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+                        <input type="hidden" name="m" value="guardarUsuario">
+                    </div>
+                </div>
+            </form>
         </div>
-
       </div>
     </section>
 
@@ -367,13 +371,6 @@ $cu = new usuarioController();
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script>
-    let usuarioTable = document.querySelector('.usuariosTable');
-    let dataTable = new DataTable(".usuariosTable",{
-      searchable : true,
-      fixedHeight: true
-    });
-  </script>
 
 </body>
 

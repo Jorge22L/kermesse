@@ -1,3 +1,10 @@
+<?php
+
+$msg = "QUE NOTA";
+
+var_dump($msg);
+printf($msg);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
