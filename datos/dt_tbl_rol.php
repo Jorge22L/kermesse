@@ -1,32 +1,26 @@
 <?php
 
 require_once("conexion.php");
-require_once("../entidades/tbl_usuario.php");
-class dt_tbl_usuario extends Conexion{
-    private $myCon;
-
-    public function listarUsuario()
+require_once("../entidades/tbl_rol.php");
+class dt_tbl_rol extends Conexion{
+    public function listarRol()
     {
         try 
         {
-            $sql = "SELECT * FROM tbl_usuario where estado<>3;"; 
+            $sql = "SELECT * FROM tbl_rol where estado<>3;"; 
             $result = array(); 
             $stm = $this->conectar()->prepare($sql);
             $stm->execute();
 
             foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
             {
-                $tu = new tbl_usuario();
+                $rol = new tbl_rol();
 
-                $tu->setIdUsuario($r->id_usuario);
-                $tu->setNombres($r->nombres);
-                $tu->setApellidos($r->apellidos);
-                $tu->setEmail($r->email);
-                $tu->setUsuario($r->usuario);
-                $tu->setPwd($r->pwd);
-                $tu->setEstado($r->estado);
+                $rol->setIdRol($r->id_rol);
+                $rol->setRolDescripcion($r->rol_descripcion);
+                $rol->setEstado($r->estado);
 
-                $result[] = $tu;
+                $result[] = $rol;
             }
             
             return $result;
@@ -87,45 +81,5 @@ class dt_tbl_usuario extends Conexion{
         }
     }
 
-    public function editarUsuario(tbl_usuario $tu)
-    {
-        try 
-        {
-            $sql = "UPDATE tbl_usuario SET nombres = ?, apellidos = ?, email = ?, usuario = ?, pwd = ?, estado = 2 where id_usuario = ?";
-            $query = $this->conectar()->prepare($sql);
-            
-            $query->execute(array(
-                $tu->getNombres(),
-                $tu->getApellidos(),
-                $tu->getEmail(),
-                $tu->getUsuario(),
-                $tu->getPwd(),
-                $tu->getIdUsuario()
-            ));
-            
-        } 
-        catch (Exception $e) 
-        {
-            die($e->getMessage());
-        }
-    }
-
-    public function eliminarUsuario($id_usuario)
-    {
-        try 
-        {
-            $sql = "UPDATE tbl_usuario SET estado = 3 where id_usuario = ?";
-            $query = $this->conectar()->prepare($sql);
-            
-            $query->execute(array(
-                $id_usuario
-            ));
-            
-        } 
-        catch (Exception $e) 
-        {
-            die($e->getMessage());
-        }
-    }
 }
 ?>
